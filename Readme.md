@@ -5,36 +5,37 @@
 
 - Need a structure to explain this package 
 ## Command line tool:
-    python3 WSI_PATCH_Extraction.py -args
-    Mandatory args 
-    - -i: input svs file path
-    - -o: output folder path
-    - -f: input folder for path
-        - Note: you should use either -i or -f, cannot use both.
-    Additional args
-    - -c: criteria
-        - criteria: Random or None, Default is None
-    - -s: patch size
-        - Size of the patch to extract, default is (256,256)
-    - -n: number of patches
-        - Only should be given for -c Random. Default value is 2000.
-    - -a: input xml
-        - if annotations are provided annotations file path should be given. Otherwise don't use this arg.
+python3 WSI_PATCH_Extraction.py -args
+Mandatory args 
+- -i: input svs file path
+- -o: output folder path
+- -f: input folder for path
+    - Note: you should use either -i or -f, cannot use both.
+Additional args
+- -c: criteria
+    - criteria: Random or None, Default is None
+- -s: patch size
+    - Size of the patch to extract, default is (256,256)
+- -n: number of patches
+    - Only should be given for -c Random. Default value is 2000.
+- -a: input xml
+    - if annotations are provided annotations file path should be given. Otherwise don't use this arg.
     
 # Package Usage:
 ## Reading WSI
-        **Description**
-        - use WSI_Scanning.readWSI() to read an WSI Image
-        - Input: WSI path or directory
-        - Output: functioning numpy array of WSI Image with dtype int32
-         **Function**
-        - readWSI(WSI_path, magnification_level, annotation_file, annonated_level)
-            - Arguments
-                - WSI_path: Directory of WSI
-                - magnification_level: level of zoom, example (40x,20x,10x,5x). Default magnification is **“20x”** 
-                    - Note if magnification 40x for max zoom level of 20x image an error will be raised.
-                - annotation_file: Default annotation = None. if annotation are available in xml formats. use annotation = inputxml file path.
-                - annonated_level= if annotation is not giving no need to consider this variable. if annotation is given then mention z-axis of annotations. Default annotatedlevel =0
+**Description**
+- use WSI_Scanning.readWSI() to read an WSI Image
+- Input: WSI path or directory
+- Output: functioning numpy array of WSI Image with dtype int32
+ **Function**
+- readWSI(WSI_path, magnification_level, annotation_file, annonated_level)
+    - Arguments
+    
+        - WSI_path: Directory of WSI
+        - magnification_level: level of zoom, example (40x,20x,10x,5x). Default magnification is **“20x”** 
+            - Note if magnification 40x for max zoom level of 20x image an error will be raised.
+        - annotation_file: Default annotation = None. if annotation are available in xml formats. use annotation = inputxml file path.
+        - annonated_level= if annotation is not giving no need to consider this variable. if annotation is given then mention z-axis of annotations. Default annotatedlevel =0
     ###Reading image example
     from WSI_Preprocessing.Preprocessing import WSI_Scanning 
     import cv2 
