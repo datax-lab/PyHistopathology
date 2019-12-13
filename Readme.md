@@ -1,6 +1,6 @@
 # Python Package: WSI_Preprocessing
 
-# Python Package: XXXX
+# Python Package: ----
 
 
 - Need a structure to explain this package 
