@@ -1,5 +1,3 @@
-# Python Package: WSI_Preprocessing
-
 # Python Package: PyHistopathology
 
 
