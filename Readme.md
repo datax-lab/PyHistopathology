@@ -1,6 +1,6 @@
 # Python Package: WSI_Preprocessing
 
-# Python Package: ----
+# Python Package: PyHistopathology
 
 
 - Need a structure to explain this package 
