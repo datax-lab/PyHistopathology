@@ -23,7 +23,7 @@ Path or location of WSI.
 magnification_level
 -------------------
 
-Level of zoom, for example 40x, 20x, 10x, or 5x. Default magnification level is “20x”.
+Level of zoom, for example 40, 20, 10, or 5. Default magnification level is 20.
 - Note: if magnification 40x for max zoom level of 20x image an error will be raised.
 
 annotation_file
