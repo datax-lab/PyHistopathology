@@ -1,7 +1,7 @@
 # Python Package: PyHistopathology
 
+Read our documentation at https://pyhistopathology.readthedocs.io/en/latest/
 
-- Need a structure to explain this package 
 ## Command line tool:
 python3 WSI_PATCH_Extraction.py -args
 Mandatory args 
