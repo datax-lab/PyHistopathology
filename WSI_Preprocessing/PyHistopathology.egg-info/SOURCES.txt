@@ -1,0 +1,7 @@
+README.md
+WSI_Patch_Extraction.py
+setup.py
+PyHistopathology.egg-info/PKG-INFO
+PyHistopathology.egg-info/SOURCES.txt
+PyHistopathology.egg-info/dependency_links.txt
+PyHistopathology.egg-info/top_level.txt
