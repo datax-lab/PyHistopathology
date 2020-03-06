@@ -11,7 +11,7 @@ from openslide.deepzoom import DeepZoomGenerator as dz
 import cv2
 import math
 import pandas as pd
-from WSI_Preprocessing.Preprocessing.Annotation_parsing import extracting_roi_annotations
+from Preprocessing.Annotation_parsing import extracting_roi_annotations
 def readWSI(slide_path,magnification = "20x", Annotation = None , Annotatedlevel = 0, Requiredlevel = 0):
     slide = OpenSlide(slide_path)
     slide_dimensions = slide.level_dimensions

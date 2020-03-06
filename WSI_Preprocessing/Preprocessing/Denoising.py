@@ -2,8 +2,8 @@ import cv2
 import math
 import numpy as np
 import os
-from WSI_Preprocessing.Preprocessing.WSI_Scanning import readWSI
-from WSI_Preprocessing.Preprocessing.Utilities import garbage_collector,denoising_lowermiginification_guassianblur,denoising_RGB_Thersholding,denoising_No_filters,dictionary,denoising_using_GaussianBlur
+from Preprocessing.WSI_Scanning import readWSI
+from Preprocessing.Utilities import garbage_collector,denoising_lowermiginification_guassianblur,denoising_RGB_Thersholding,denoising_No_filters,dictionary,denoising_using_GaussianBlur
 
 def denoising(inputsvs,magnification,filtering = "GaussianBlur",patch_size = (256,256),upperlimit = 900, lowerlimit = 300, red_value = (80,220), green_value = (80,200), blue_value = (80, 170), Annotation = None, Annotatedlevel = 0, Requiredlevel = 0):
     img,slide_dimensions= readWSI(inputsvs,magnification,Annotation, Annotatedlevel, Requiredlevel)

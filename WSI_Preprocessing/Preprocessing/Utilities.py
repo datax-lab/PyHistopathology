@@ -2,7 +2,7 @@ import cv2
 import math
 import numpy as np
 import os
-from WSI_Preprocessing.Preprocessing.WSI_Scanning import readWSI
+from Preprocessing.WSI_Scanning import readWSI
 import gc
 import pprint
 

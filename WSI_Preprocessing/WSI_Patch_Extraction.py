@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from WSI_Preprocessing.Preprocessing import Extarctingpatches
+from Preprocessing import Extarctingpatches
 import os
 import sys, getopt
 

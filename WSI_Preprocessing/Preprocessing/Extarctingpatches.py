@@ -1,6 +1,6 @@
-from WSI_Preprocessing.Preprocessing.WSI_Scanning import readWSI
-from WSI_Preprocessing.Preprocessing.Denoising import denoising
-from WSI_Preprocessing.Preprocessing.Patch_extraction_creatia import patch_extraction_random, all_patches_extarction
+from Preprocessing.WSI_Scanning import readWSI
+from Preprocessing.Denoising import denoising
+from Preprocessing.Patch_extraction_creatia import patch_extraction_random, all_patches_extarction
 import cv2
 def extractingPatches(inputsvs,outputpath,magnification,patch_extraction_creatia = None,num_of_patches = 2000, filtering = "GaussianBlur",patch_size = (256,256),upperlimit = 900, lowerlimit = 300,red_value = (80,220), green_value = (80,200), blue_value = (80, 170),  reconstructedimagepath = None, Annotation = None, Annotatedlevel = 0, Requiredlevel = 0):
     
