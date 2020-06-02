@@ -2,13 +2,13 @@ import cv2
 import math
 import numpy as np
 import os
-from Preprocessing.WSI_Scanning import readWSI
+from WSI_Preprocessing.Preprocessing.WSI_Scanning import readWSI
 import gc
 import pprint
 
-def localization_with_GaussianBlur(inputsvs,img,patch_size ,upperlimit, lowerlimit):
+def localization_with_GaussianBlur(inputsvs,img,magnification,patch_size ,upperlimit, lowerlimit,Annotation , Annotatedlevel,Requiredlevel):
     slide1 = inputsvs
-    slide1, slide_dims = readWSI(inputsvs)
+    slide1, slide_dims = readWSI(inputsvs,magnification,Annotation , Annotatedlevel , Requiredlevel)
     patch_x = 20
     for i in range(int((len(slide1[0]))/patch_x)+1):
         for j in range(int((len(slide1))/patch_x)+1):
@@ -50,6 +50,8 @@ def GaussianBlur(img,patch_size ,upperlimit, lowerlimit):
                 return None
     except:
         return None
+    
+    
 def RGB_Thersholding(img,patch_size,red_value, green_value, blue_value):
     if len(img) < patch_size[1] or len(img[0]) < patch_size[0]:
         return None
@@ -68,14 +70,14 @@ def RGB_Thersholding(img,patch_size,red_value, green_value, blue_value):
         elif np.mean(Xb) < blue_value[0] or np.mean(Xb) > blue_value[1]:
             return None
         else:
-            cv2.imwrite("temp0.png", img)
-            img_bg = cv2.imread("temp0.png", 0)
-            if (img_bg.mean() < 220) and (img_bg.mean() > 50):
+            cv2.imwrite("/home/skosaraju/CATNet2/temp1.png", img)
+            img_bg = cv2.imread("/home/skosaraju/CATNet2/temp1.png", 0)
+            if (img_bg.mean() < 245) and (img_bg.mean() > 30):
                 return img
             else:
                 return None
 
-def stainremover_small_patch_remover1(img,patch_size = (256,256)):
+def stainremover_small_patch_remover1(img,patch_size):
     if len(img) < patch_size[1] or len(img[0]) < patch_size[0]:
         return None
     else:
@@ -93,9 +95,9 @@ def stainremover_small_patch_remover1(img,patch_size = (256,256)):
         elif np.mean(Xb) < 0 or np.mean(Xb) > 255:
             return None
         else:
-            cv2.imwrite("temp0.png", img)
-            img_bg = cv2.imread("temp0.png", 0) 
-            if (img_bg.mean() < 240) and (img_bg.mean() > 10):
+            cv2.imwrite("tempN1.png", img)
+            img_bg = cv2.imread("tempN1.png", 0)
+            if ((img_bg.mean() < 230) and (img_bg.mean() > 20)):
                 return img
             else:
                 return None
@@ -110,10 +112,11 @@ def making_one_image(inputfolder):
     img7 = np.concatenate([img5,img6], axis =0 )
     cv2.imwrite("%s/final.png"%(inputfolder),img7)
     return       
-       
+
+
 def mask_generation(img,slide_dimen,mask_generation_c = 'G'):
-    cv2.imwrite("temp.png",img)
-    img_gray = cv2.imread("temp.png",0)
+    cv2.imwrite("tempR.png",img)
+    img_gray = cv2.imread("tempR.png",0)
     ret, bw_img = cv2.threshold(img_gray,160,255,cv2. THRESH_BINARY)
     kernel = np.ones((2,2),np.uint8)
     erosion = cv2.erode(bw_img,kernel,iterations = 10)
@@ -129,7 +132,7 @@ def mask_generation(img,slide_dimen,mask_generation_c = 'G'):
     erosionnf = cv2.merge((erosionnf,erosionnf,erosionnf))
 #     cv2.imwrite("temp1.png",erosionnf)
 #     erosionnf = cv2.imread("temp1.png")
-    os.remove("temp.png")
+#     os.remove("tempR.png")
 #     os.remove("temp1.png")
     erosionnf =  np.asarray(erosionnf, dtype="int32")
     return erosionnf
@@ -155,36 +158,45 @@ def dictionary(slide_dimensions):
 
 
 
+def black_to_white(img):
+    for i in range(len(img)):
+        for j in range(len(img[0])):
+            if (img[i][j][0] == 0) and (img[i][j][1] == 0) and (img[i][j][2] == 0) :
+                img[i][j] = [255,255,255]
+    return img
 
 
 
-
-def denoising_using_GaussianBlur(inputsvs,magnification,img,dictx,patch_size ,upperlimit, lowerlimit):
-    mask = denoising_lowermiginification_guassianblur(inputsvs,magnification,dictx,patch_size ,upperlimit, lowerlimit)
+def denoising_using_GaussianBlur(inputsvs,magnification,img,dictx,patch_size ,upperlimit, lowerlimit,Annotation , Annotatedlevel , Requiredlevel):
+    mask = denoising_lowermiginification_guassianblur(inputsvs,magnification,dictx,patch_size ,upperlimit, lowerlimit,Annotation , Annotatedlevel , Requiredlevel)
 #     mask = cv2.bitwise_not(mask)
     print("cleanedimage at low maginfication done")
-#     img,slide_dimensions= reading_WSI(inputsvs,maginification="20x")
+    img,slide_dimensions= readWSI(inputsvs,magnification ,Annotation , Annotatedlevel , Requiredlevel)
     print("loading high magnification image")
     out = np.zeros_like(img)
     img = np.asarray(img, dtype="int32")
-    cv2.imwrite("/home/pagenet2/PageNet2/Final_Package/orginalimage/%s.png"%(inputsvs.split("/")[-1][:-4]),img)
+    cv2.imwrite("check2.png",img)
     print("cleaning image at high mignification")
     mask = mask.astype(np.bool)
     out[mask] = img[mask]
-    out = np.where(out != [0, 0, 0], out, [255,255,255])
+    cv2.imwrite("check3.png",out)
+    out[np.where((out == [0,0,0]).all(axis = 2))] = [255,255,255]
+#     out = black_to_white(out)
     print("cleaning WSI done")
-    cv2.imwrite("/home/pagenet2/PageNet2/Final_Package/cleanedimages/%s.png"%(inputsvs.split("/")[-1][:-4]),out)
+    cv2.imwrite("check4.png",out)
     garbage_collector()
     print("exisiting cleaning")
     return out
         
 
-def denoising_lowermiginification_guassianblur(inputsvs,magnification,dictx,patch_size ,upperlimit, lowerlimit):
-    non_black_img,slide_dimen = readWSI(inputsvs,magnification = "5x")
+def denoising_lowermiginification_guassianblur(inputsvs,magnification,dictx,patch_size ,upperlimit, lowerlimit, Annotation , Annotatedlevel , Requiredlevel):
+    
+    non_black_img,slide_dimen = readWSI(inputsvs,"5x",Annotation , Annotatedlevel , Requiredlevel = Requiredlevel+2)
     #sliden = np.asarray(non_black_img, dtype="int32")
-    sliden1 = localization_with_GaussianBlur(inputsvs,non_black_img,patch_size ,upperlimit, lowerlimit)
+    sliden1 = localization_with_GaussianBlur(inputsvs,non_black_img,magnification,patch_size ,upperlimit, lowerlimit,Annotation , Annotatedlevel , Requiredlevel)
 #     print("Slide demensions",slide_dimen)
 
+    cv2.imwrite("check1.png",sliden1)
     sliden2 = mask_generation(sliden1,slide_dimen[dictx[magnification]],mask_generation_c = "G")
     garbage_collector()
     del(sliden1,non_black_img,slide_dimen)
@@ -201,7 +213,7 @@ def localization_RGB_Thersholding(inputsvs,patch_size,magnification,red_value,gr
                     slide1[j * patch_x:j * patch_x + patch_x, i * patch_x:i * patch_x+ patch_x]  = np.zeros_like(sample_img)
                 else:
                     slide1[j*patch_x:j*patch_x+patch_x,i*patch_x:i*patch_x+patch_x] = sample_img
-        slide1 = np.where(slide1 != [0, 0, 0], slide1, [255, 255, 255])
+        slide1[np.where((slide1 == [0,0,0]).all(axis = 2))] = [255,255,255]
         garbage_collector()
         return slide1
 def denoising_RGB_Thersholding(inputsvs,slide_dimen,magnification,dictx):
@@ -215,7 +227,7 @@ def denoising_RGB_Thersholding(inputsvs,slide_dimen,magnification,dictx):
 def denoising_No_filters(inputsvs,slide_dimen,magnification,dictx):
     #non_black_img,slide_dimen = readWSI(inputsvs,magnification)
     sliden2 = mask_generation(inputsvs, slide_dimen[dictx[magnification]], mask_generation_c = "L")
-    del(non_black_img,slide_dimen)
+#     del(non_black_img,slide_dimen)
     return sliden2
 
 
