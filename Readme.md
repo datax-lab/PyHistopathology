@@ -56,7 +56,7 @@ use Denoising.denoising() to remove stains, folds and other background noise in 
 
 Function
 
-denoising(inputsvs, magnification, filtering, patch_size, upperlimit, lowerlimit, red_value, green_value, blue_value)
+denoising(inputsvs, magnification, filtering, patch_size, upperlimit, lowerlimit, red_value, green_value, blue_value, Annotation, Annotatedlevel, Requiredlevel, meannumber)
  Arguments
  - inputsvs: path or location of WSI.
  - magnification: level of zoom, example (40x,20x,10x,5x). Default magnification is **“20x”** 
@@ -67,6 +67,7 @@ denoising(inputsvs, magnification, filtering, patch_size, upperlimit, lowerlimit
          - Upper limit: upper threshold of homogeneity score. default value is 9500 with kernel size of 11*11
          - lower limit: lower threshold of homogeneity score. default value is 1500 with kernel size of 11*11
          - Patch size: Not significant parameters for GuassianBlur filtering
+         - meannumber: Theshold of mean area to remove small patches default number is 8
    - RGBThersholding: 
          Validated patches based on RGB values of patches
          - red_value, green-value, blue_values are threshold for RGB
