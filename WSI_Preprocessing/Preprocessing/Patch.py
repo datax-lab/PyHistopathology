@@ -19,10 +19,10 @@ def Extraction_slides_with_annotations(inputxml,inputsvs,outpath,Patch_extractio
     return
 # @jit(target = "cuda")
 
+
+
 def Extraction_slides_without_annotations(inputsvs,outpath,Patch_extraction_creatia,patch_size,num_of_patches):
     os.mkdir("Reconstructedimages")
-#     os.mkdir("/home/pagenet2/PageNet2/Data Preprocessing Pipeline/WSI_Precessing_test/cleanedimages/%s"%inputsvs.split("/")[-1][:-4])
-#     os.mkdir("/home/pagenet2/PageNet2/Data Preprocessing Pipeline/WSI_Precessing_test/Reconstructedimages/%s"%inputsvs.split("/")[-1][:-4])
     slidei = cleaning_image_at_high_mignification(inputsvs)
     if Patch_extraction_creatia == 'random':
         patch_extraction_random(slidei, outpath,patch_size, num_of_patches)
