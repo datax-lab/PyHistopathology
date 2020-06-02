@@ -1,6 +1,6 @@
 import cv2
 import random
-from Preprocessing.Utilities import stainremover_small_patch_remover1
+from WSI_Preprocessing.Preprocessing.Utilities import stainremover_small_patch_remover1
 import numpy as np
 
 def random_patchcs_with_uniform_distrubutions(img, tile_size):
