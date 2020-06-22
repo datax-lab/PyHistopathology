@@ -12,7 +12,7 @@ import cv2
 import math
 import pandas as pd
 from WSI_Preprocessing.Preprocessing.Annotation_parsing import extracting_roi_annotations
-def readWSI(slide_path,magnification, Annotation , Annotatedlevel, Requiredlevel):
+def readWSI(slide_path,magnification, Annotation  = None, Annotatedlevel=0, Requiredlevel=0):
     slide = OpenSlide(slide_path)
     slide_dimensions = slide.level_dimensions
     
@@ -37,7 +37,7 @@ def readWSI(slide_path,magnification, Annotation , Annotatedlevel, Requiredlevel
     mag = dictx[magnification]
     slide_img_1 = slide.read_region((0,0), mag , (slide.level_dimensions[mag][0], slide.level_dimensions[mag][1])).convert('RGB')
     slide_img_1 = np.asarray(slide_img_1, dtype="int32")
-    cv2.imwrite("20x.png",slide_img_1)
+    # cv2.imwrite("20x.png",slide_img_1)
 #     print(Annotation)
     if Annotation != None:
 #         print('yes')
@@ -58,12 +58,12 @@ def reading_WSI_with_annotations(slide_img, new_cordinate_list):
 #         print((slide1.shape[0], slide1.shape[1]))
 #         print(new_cordinate_list[i])
         cv2.fillConvexPoly(mask, np.array(new_cordinate_list[i]), 1)
-        cv2.imwrite("example%s.png"%i,mask)
+        # cv2.imwrite("example%s.png"%i,mask)
         mask = mask.astype(np.bool)
         out[mask] = slide1[mask]
         # out[out == [0,0,0]] =  [255,255,255]
 #         cv2.imwrite("example%s.png"%i,mask)
-    out[np.where((out == [0,0,0]).all(axis = 2))] = [255,255,255]
+    out = np.where(out != [0, 0, 0], out, [255,255,255])
     # print('yes')
-    cv2.imwrite("out.png",out)
-    return np.array(out)
+#     cv2.imwrite("out.png",out)
+    return np.array(out,dtype='uint8')
