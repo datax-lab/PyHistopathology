@@ -235,14 +235,14 @@ def mask_generation(img,slide_dimen,mask_generation_c = 'G'):
     return img3
 
 
-def GaussianBlur(img,patch_size ,upperlimit, lowerlimit):
+def GaussianBlur(img,patch_size ,upperlimit, lowerlimit,std):
     cleaned_Images = []
     try:  
         if len(img) < patch_size[1] or len(img[0]) < patch_size[0]:
             return None     
         else:
-            cv2.imwrite("temp0.png", img)
-            img_bg = cv2.imread("temp0.png", 0)
+            cv2.imwrite("temp%s.png"%std, img)
+            img_bg = cv2.imread("temp%s.png"%std, 0)
             non = img_bg
             blur_non = cv2.GaussianBlur(non, (11, 11), 2)
             for i in range(20):
@@ -257,15 +257,15 @@ def GaussianBlur(img,patch_size ,upperlimit, lowerlimit):
     except:
         return None
     
-def GaussianBlurjpeg(img,patch_size ,upperlimit, lowerlimit):
+def GaussianBlurjpeg(img,patch_size ,upperlimit, lowerlimit,std):
     cleaned_Images = []
     try:  
         if len(img) < patch_size[1] or len(img[0]) < patch_size[0]:
             return None     
         else:
 #             print("here")
-            cv2.imwrite("temp0.png", img)
-            img_bg = cv2.imread("temp0.png", 0)
+            cv2.imwrite("temp%s.png"%std, img)
+            img_bg = cv2.imread("temp%s.png"%std, 0)
             non = img_bg
             
             blur_non = cv2.GaussianBlur(non, (63, 63), 2)
@@ -332,7 +332,7 @@ def split_up_resize(arr, res):
     garbage_collector()
     return arr
 
-def denoising_jpeg(img,upperlimit =290000, lowerlimit = 1500):
+def denoising_jpeg(img,std = 0,upperlimit =290000, lowerlimit = 1500):
     slide1 = cv2.imread(img)
     patch_x = 256
     for i in range(int((len(slide1[0]))/patch_x)+1):
@@ -345,8 +345,8 @@ def denoising_jpeg(img,upperlimit =290000, lowerlimit = 1500):
                 slide1[j*patch_x:j*patch_x+patch_x,i*patch_x:i*patch_x+patch_x] = sample_img       
     slide1[np.where((slide1 == [0,0,0]).all(axis = 2))] = [255,255,255]
     garbage_collector()
-    cv2.imwrite("tempR.png",slide1)
-    img_gray = cv2.imread("tempR.png",0)
+    cv2.imwrite("temp%sR.png"%std,slide1)
+    img_gray = cv2.imread("temp%sR.png"%std,0)
     ret, bw_img = cv2.threshold(img_gray,160,255,cv2. THRESH_BINARY)
     kernel = np.ones((4,4),np.uint8)
     erosion = cv2.erode(bw_img,kernel,iterations = 10)
@@ -362,9 +362,9 @@ def denoising_jpeg(img,upperlimit =290000, lowerlimit = 1500):
 #     kernalnew1 = np.ones((1, 1), np.uint8)
 #     img_d = cv2.erode(img_n, kernalnew, iterations=10)
 #     img_d = cv2.dilate(img_d, kernalnew1, iterations=5)
-    cv2.imwrite("examplee.png",erosionnf)
+#     cv2.imwrite("examplee.png",erosionnf)
     binary_map1 = (erosionnf > 200).astype(np.uint8)
-    cv2.imwrite("examplee1.png",binary_map1)
+#     cv2.imwrite("examplee1.png",binary_map1)
     X = cv2.connectedComponentsWithStats(binary_map1, 8)[2][1:]
     output = cv2.connectedComponentsWithStats(binary_map1, 8)[1]
     img2 = np.zeros((output.shape))
@@ -373,7 +373,7 @@ def denoising_jpeg(img,upperlimit =290000, lowerlimit = 1500):
         for i in range(len(X)):
             if X[i,4]>X[:,4].mean()*8:
                 img2[output == i + 1] = 255
-                cv2.imwrite("exampleee2.png", img2*255)
+                cv2.imwrite("exampleee%s2.png"%std, img2*255)
 
         #         img_d1 = img[X[i,1] : X[i,1]+X[i,3],X[i,0] : X[i,0]+X[i,2]]
         #         img_d1 = cv2.cvtColor(img_d1, cv2.COLOR_RGB2BGR)
@@ -384,8 +384,8 @@ def denoising_jpeg(img,upperlimit =290000, lowerlimit = 1500):
         for i in range(len(X)):
             if X[i,4]>X[:,4].mean():
                 img2[output == i + 1] = 255
-                cv2.imwrite("exampleee2.png", img2*255)
-    img3 = cv2.imread("exampleee2.png")
+                cv2.imwrite("exampleee%s2.png"%std, img2*255)
+    img3 = cv2.imread("exampleee%s2.png"%std)
     img3 = img3/255
     img4 = slide1*img3
     img4[np.where((img4 == [0,0,0]).all(axis = 2))] = [255,255,255]
