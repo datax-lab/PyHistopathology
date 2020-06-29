@@ -338,7 +338,7 @@ def denoising_jpeg(img,std = 0,upperlimit =290000, lowerlimit = 1500):
     for i in range(int((len(slide1[0]))/patch_x)+1):
         for j in range(int((len(slide1))/patch_x)+1):
             sample_img = slide1[j*patch_x:j*patch_x+patch_x,i*patch_x:i*patch_x+patch_x]
-            sample_img_new = GaussianBlurjpeg(sample_img,(patch_x,patch_x),upperlimit, lowerlimit)
+            sample_img_new = GaussianBlurjpeg(sample_img,(patch_x,patch_x),upperlimit, lowerlimit,std)
             if sample_img_new is None:
                 slide1[j * patch_x:j * patch_x + patch_x, i * patch_x:i * patch_x+ patch_x]  = np.zeros_like(sample_img)     
             else:
