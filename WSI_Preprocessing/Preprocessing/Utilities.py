@@ -96,8 +96,17 @@ def dictionary(slide_dimensions):
         print("Highest magnification level is 20x")
         dictx = {"20x":0,"10x":1,"5x":2}
     else:
-        print("Highest magnification level is 40x")
-        dictx = {"40x":0,"20x":1,"10x":2,"5x":3}
+        if len(slide_dimensions) == 4:
+            print("Highest magnification level is 40x")
+            dictx = {"40x":0,"20x":1,"10x":2,"5x":3}
+        else:
+            if len(slide_dimensions) == 2:
+                print("Highest magnification level is 10x")
+                dictx = {"10x":0,"5x":1}
+            else:
+                print("Highest magnification level is 10x")
+                dictx = {"5x":0}
+                
     return dictx
 
 
@@ -143,9 +152,13 @@ def denoising_lowermiginification_guassianblur(inputsvs,magnification,dictx,patc
 #     magnification = "5x"
     sliden1 = localization_with_GaussianBlur(non_black_img,slide_dimen,patch_size ,upperlimit, lowerlimit,Annotation , Annotatedlevel , Requiredlevel)
 #     print("Slide demensions",slide_dimen)
-    magnification = "20x"
+    magnification = magnification
+    try:
 #     cv2.imwrite("check1.png",sliden1)
-    sliden2 = mask_generation(sliden1,slide_dimen[dictx[magnification]],mask_generation_c = "G")
+        sliden2 = mask_generation(sliden1,slide_dimen[dictx[magnification]],mask_generation_c = "G")
+    except:
+        print("this image has lower magnification then the given magnification, cleaning the image at highest magnification possible")
+        sliden2 = mask_generation(sliden1,slide_dimen[0],mask_generation_c = "G")
     
     garbage_collector()
     del(sliden1,non_black_img,slide_dimen)
