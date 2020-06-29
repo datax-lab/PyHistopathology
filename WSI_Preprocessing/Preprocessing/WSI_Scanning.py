@@ -17,6 +17,7 @@ def readWSI(slide_path,magnification, Annotation  = None, Annotatedlevel=0, Requ
     slide_dimensions = slide.level_dimensions
     
     if len(slide_dimensions) == 3:
+        print("max_dim:20x")
         
         dictx = {"20x":0,"10x":1,"5x":2}
 
@@ -27,14 +28,30 @@ def readWSI(slide_path,magnification, Annotation  = None, Annotatedlevel=0, Requ
 #             raise Exception("maginification should be 40x, 20x, 10x 0r 5x")
 
     else:
+        if len(slide_dimensions) == 4:
+            print("max_dim:40x")
         
        
-        dictx = {"40x":0,"20x":1,"10x":2,"5x":3}
+            dictx = {"40x":0,"20x":1,"10x":2,"5x":3}
+        else:
+            if len(slide_dimensions) == 2:
+                print("max_dim:10x")
+                dictx = {"10x":0,"5x":1}
+            else:
+                print("max_dim:5x")
+                dictx = {"5x":1}
+                
+            
+        
 #     if magnification != dictx.keys():
 #         raise Exception("maginification should be 40x, 20x, 10x 0r 5x")
 
-    print(dictx[magnification])
-    mag = dictx[magnification]
+    try:
+        print(dictx[magnification])
+        mag = dictx[magnification]
+    except:
+        print("current slide has lower magnification then given magnification, reading slide at hihest possible magnification")
+        mag = 0
     slide_img_1 = slide.read_region((0,0), mag , (slide.level_dimensions[mag][0], slide.level_dimensions[mag][1])).convert('RGB')
     slide_img_1 = np.asarray(slide_img_1, dtype="int32")
     # cv2.imwrite("20x.png",slide_img_1)
