@@ -153,6 +153,7 @@ def denoising_lowermiginification_guassianblur(inputsvs,magnification,dictx,patc
     sliden1 = localization_with_GaussianBlur(non_black_img,slide_dimen,patch_size ,upperlimit, lowerlimit,Annotation , Annotatedlevel , Requiredlevel)
 #     print("Slide demensions",slide_dimen)
     magnification = magnification
+    print(magnification)
     try:
 #     cv2.imwrite("check1.png",sliden1)
         sliden2 = mask_generation(sliden1,slide_dimen[dictx[magnification]],mask_generation_c = "G")
@@ -172,7 +173,7 @@ def localization_with_GaussianBlur(non_black_img,slide_dimen,patch_size ,upperli
     for i in range(int((len(slide1[0]))/patch_x)+1):
         for j in range(int((len(slide1))/patch_x)+1):
             sample_img = slide1[j*patch_x:j*patch_x+patch_x,i*patch_x:i*patch_x+patch_x]
-            sample_img_new = GaussianBlur(sample_img,(patch_x,patch_x),upperlimit, lowerlimit)
+            sample_img_new = GaussianBlur(sample_img,(patch_x,patch_x),upperlimit, lowerlimit,std = 0)
             if sample_img_new is None:
                 slide1[j * patch_x:j * patch_x + patch_x, i * patch_x:i * patch_x+ patch_x]  = np.zeros_like(sample_img)     
             else:
@@ -213,10 +214,10 @@ def mask_generation(img,slide_dimen,mask_generation_c = 'G'):
     X = cv2.connectedComponentsWithStats(binary_map1, 8)[2][1:]
     output = cv2.connectedComponentsWithStats(binary_map1, 8)[1]
     img2 = np.zeros((output.shape))
-    if cv2.connectedComponentsWithStats(binary_map1, 8)[0] > 15:
+    if cv2.connectedComponentsWithStats(binary_map1, 8)[0] > 10:
         print("1,%s"%cv2.connectedComponentsWithStats(binary_map1, 8)[0])
         for i in range(len(X)):
-            if X[i,4]>X[:,4].mean()*8:
+            if X[i,4]>X[:,4].mean():
                 img2[output == i + 1] = 255
                 cv2.imwrite("exampleee2.png", img2*255)
 
