@@ -214,10 +214,10 @@ def mask_generation(img,slide_dimen,mask_generation_c = 'G'):
     X = cv2.connectedComponentsWithStats(binary_map1, 8)[2][1:]
     output = cv2.connectedComponentsWithStats(binary_map1, 8)[1]
     img2 = np.zeros((output.shape))
-    if cv2.connectedComponentsWithStats(binary_map1, 8)[0] > 10:
+    if cv2.connectedComponentsWithStats(binary_map1, 8)[0] > 30:
         print("1,%s"%cv2.connectedComponentsWithStats(binary_map1, 8)[0])
         for i in range(len(X)):
-            if X[i,4]>X[:,4].mean():
+            if X[i,4]>X[:,4].mean()*8:
                 img2[output == i + 1] = 255
                 cv2.imwrite("exampleee2.png", img2*255)
 
