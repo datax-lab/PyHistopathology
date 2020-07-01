@@ -8,7 +8,7 @@ import openslide
 from openslide import (OpenSlide, OpenSlideError,OpenSlideUnsupportedFormatError)
 
 
-def denoising(inputsvs,magnification,filtering = "GaussianBlur",patch_size = (256,256),upperlimit = 1100, lowerlimit = 300, red_value = (80,220), green_value = (80,200), blue_value = (80, 170), Annotation = None, Annotatedlevel = 0, Requiredlevel = 0):
+def denoising(inputsvs,magnification = "20x",filtering = "GaussianBlur",patch_size = (256,256),upperlimit = 1100, lowerlimit = 300, red_value = (80,220), green_value = (80,200), blue_value = (80, 170), Annotation = None, Annotatedlevel = 0, Requiredlevel = 0):
     slide = OpenSlide(inputsvs)
     slide_dimensions = slide.level_dimensions
 #     img,slide_dimensions= readWSI(inputsvs,magnification,Annotation, Annotatedlevel, Requiredlevel)
