@@ -18,8 +18,8 @@ def parse(inputfile, regions, vertices):
 
 
 def annotation_conversion(slide_dimensions, coordinates,annotatedlevel,reqiuredlevel):
-    y_axis = slide_dimensions[reqiuredlevel][1] / slide_dimensions[reqiuredlevel][1]
-    x_axis = slide_dimensions[reqiuredlevel][0] / slide_dimensions[reqiuredlevel][0]
+    y_axis = slide_dimensions[reqiuredlevel][1] / slide_dimensions[annotatedlevel][1]
+    x_axis = slide_dimensions[reqiuredlevel][0] / slide_dimensions[annotatedlevel][0]
     new_cordinate_list = []
     new_cordinate_list_temp = []
     for j in coordinates.values():
