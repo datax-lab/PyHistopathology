@@ -14,7 +14,7 @@ setuptools.setup(
 
      author="Sai Chandra",
 
-     author_email="deepak.kumar.iet@gmail.com",
+     author_email="sai.kosaraju@unlv.edu",
 
      description="A WSI Image processing application",
 
