@@ -120,8 +120,6 @@ Extractingpatches.extractingPatches(example.svs, outputpath, magnification)
                 
     
 
-
-
                 
         
 
