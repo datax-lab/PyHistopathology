@@ -46,6 +46,7 @@ def polygon_or_cross(cordinate_list):
         return "cross"
 
 def extracting_roi_annotations(inputfile,slide_dims,annotatedlevel,reqiuredlevel):
+    print("here")
     coordinates = parse(inputfile, regions='Region', vertices='Vertex')
     new_cordinate_list = annotation_conversion(slide_dims, coordinates,annotatedlevel,reqiuredlevel)
     coordinate_filter_list = []
@@ -54,4 +55,6 @@ def extracting_roi_annotations(inputfile,slide_dims,annotatedlevel,reqiuredlevel
             coordinate_filter_list.append(new_cordinate_list[i])
         else:
             None
+#     print(coordinate_filter_list)
+    print("here1")
     return coordinate_filter_list
